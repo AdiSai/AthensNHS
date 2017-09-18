@@ -1,7 +1,7 @@
 function runAll() {
   var start = new Date().getTime();
-  //ID's are the random characters that are a part of the URL between /d/ and /edit
   //START THINGS TO CHANGE EVERY YEAR
+  //ID's are the random characters that are a part of the URL between /d/ and /edit
   var folderId = ''; //Year Folder
   var fileId = ''; //Template NHS Points Sheet
   var memberListSheetId = ''; //NHS Members + Email Sheet
@@ -16,21 +16,13 @@ function runAll() {
   var dataRange = sheet.getRange(2, 1, sheet.getLastRow() - 1, 2);
   var data = dataRange.getValues();
   var baseFolder = DriveApp.getFolderById(folderId);
-  var nhsMembers = [];
-  for (i in data) {
-    var member = data[i][0];
-    var iterator = baseFolder.getFoldersByName(member.toString());
-    if (!(iterator.hasNext())) {
-      if (member != null || member != "" || member != 0) { nhsMembers.push(member); }
-    }
-  }
   //END CREATING MEMBER LIST
 
   //START OPERATIONS
-  createFoldersForEveryPerson(folderId, nhsMembers);
-  createSubFolders(folderId, subFolders);
-  copyPointSheets(folderId, nhsMembers, fileId);
-  shareFolders(folderId, data, masterSheetId, memberListSheetId);
+  createFoldersForEveryPerson(folderId, data); //Execution 1
+  createSubFolders(folderId, subFolders); //Execution 1 and 2
+  copyPointSheets(folderId, data, fileId); //Execution 3
+  shareFolders(folderId, data, masterSheetId, memberListSheetId); //Execution 4+
   //END OPERATIONS
   
   var end = new Date().getTime();
@@ -42,8 +34,8 @@ function createFoldersForEveryPerson(folderId, subFolders) {
   var folder = DriveApp.getFolderById(folderId);
   var subFoldersLength = subFolders.length;
   for (var i = 0; i < subFoldersLength; i++) {
-    Logger.log("Create Folder " + subFolders[i] + " in the Matter folder "+ folder.getName());
-    var sub = folder.createFolder(subFolders[i]);   
+    Logger.log("Create Folder " + subFolders[i][0] + " in the Matter folder "+ folder.getName());
+    var sub = folder.createFolder(subFolders[i][0]);   
   }
 }
 
@@ -70,7 +62,7 @@ function copyPointSheets(folderId, subFolders, fileId) {
   var file = DriveApp.getFileById(fileId);
   var subFoldersLength = subFolders.length;
   for (var i = 0; i < subFoldersLength; i++) {
-    var subFolder = folder.getFoldersByName(subFolders[i]).next();
+    var subFolder = folder.getFoldersByName(subFolders[i][0]).next();
     file.makeCopy(subFolder);
     Logger.log("Copy points file in the Matter folder "+ subFolder.getName());
   }
