@@ -8,7 +8,7 @@ function onOpen() {
 function run() {
   var emailAddress = "athensnhspoints@gmail.com";
   var sheet = SpreadsheetApp.getActiveSheet();
-  var dataRange = sheet.getRange(52, 7, 4, 1);
+  var dataRange = sheet.getRange(52, 8, 4, 1);
   var data = dataRange.getValues();
   updateMaster(data);
   for (i in data) {
@@ -47,7 +47,7 @@ function updateMaster(data) {
   var total = data[3];
   Logger.log(baseFolder);
   var masterSheet = SpreadsheetApp.open(DriveApp.getFileById(sheetId)).getActiveSheet();
-  var dataRange = masterSheet.getRange(1, 1, 51, 6);
+  var dataRange = masterSheet.getRange(1, 1, 150, 6);
   var values = dataRange.getValues();
   for (var i = 0; i < values.length; i++) {
     var row = "";
